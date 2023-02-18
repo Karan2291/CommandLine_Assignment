@@ -1,0 +1,754 @@
+COMMANDLINE ASSIGNMENT PEER LEARNING DOCUMENTATION
+---------------------------------------------------
+
+-----------   
+Question 1. 
+-----------
+-> Write a bash script to get the current date, time, username, home directory and current working directory.
+
+My Solution:-
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+#!/bin/bash
+
+#Question 1
+
+#Command to get current date and time
+echo "Current date and time is:  $(date)"
+
+#Command to get only date
+echo "Date is: $(date +%F)"
+
+#Command to get only time
+echo "Time is: $(date +%T)"
+
+#Command to get username
+echo "Username: $(whoami)"
+
+#Command to get Home Directory
+echo "Home Directory: $HOME"
+
+#Command to get users current working directory
+echo "Current Working Directory: $(pwd)"
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+My Approach:-
+I have used the following commands to get the desired result:
+
+COMMAND
+-------
+--------------------------------------------------------------------------
+| $(date)     : Command to fetch current date and time                   |
+--------------------------------------------------------------------------
+| $(date +%F) : Command to fetch only date.                              |
+--------------------------------------------------------------------------
+| $(date +%T) : Command to fetch only time                               |
+--------------------------------------------------------------------------
+| $(whoami)   : Command to fetch username of the current working user.   |
+--------------------------------------------------------------------------
+| $HOME       : Command to get Home Directory.                           |
+--------------------------------------------------------------------------
+| $(pwd)      : ommand to get users current working directory            |
+--------------------------------------------------------------------------
+
+
+Team Solution Review for Question 1:
+-----------------------------------
+
+Srinivas Solution:-
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+$(date +"Year: %Y, Month: %m, Day: %d") : Command to fetch the date
+$(date +"%T")                           :	Command to fetch the time
+$(whoami)	                              : Command to fetch the current working user
+$(echo $HOME).                          :	Command to fetch the Home directory
+$(pwd)                                  :	Command to fetch the current wokring directory
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Difference in Approach:-
+-> Command are mostly same as mine but the only difference is he is fetching the date with command ($(date +"Year: %Y, Month: %m, Day: %d"))
+   while in my case i am using the command ($(date +%F)) to fetch the date
+   
+Akshay's solution:-
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+# Question 1
+echo Answer 1:
+# Display Current date
+echo Current date: `date +%F`
+# Display Current time
+echo Current time: `date +%T`
+# Display Username
+echo Username: `whoami`
+# Display Home directory
+echo Home directory: ~
+# Display Current working directory
+echo Current working directory: `pwd`
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Difference in Approach:-
+-> Commands are same as mine but the way of representing it is bit different as compared to mine like he is using backtics (``) to execute the command
+while I am using dollar and parenthesis $() to execute the same
+-> One more difference is that to fetch home directory he is using ~ sign  while i am using $HOME command to fetch the same
+
+-----------   
+Question 2. 
+-----------
+-> Write a bash script (name Table.sh) to print the Table of a number by using a while loop. It should support the following requirements.
+      ● The script should accept the input from the command line.
+      ● If you don’t input any data, then display an error message to execute the script correctly.
+      
+      
+My Solution:-
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+#!/bin/bash
+
+#Question 2
+
+#Taking user input
+echo "Enter the number: "
+read n
+
+
+# Checking through case statement
+case $n in
+#Regular expression to check if the given input is not a number. If satisfies it results in a invalid input 	
+*[^0-9]*)
+     echo "Please input only number!! $n is not a number"
+     ;;
+#Regex to check for number	 
+[0-9]*)
+    i=1
+    while [ $i -le 10 ] 
+    do
+    res=`expr $i \* $n`
+
+    echo "$n * $i = $res"
+
+   (( ++i))
+
+    done
+    ;;
+#Condition that will handle the situation when there is no input	
+*)
+    echo "Error!! Please Provide Input To Get The Table"
+    ;;
+esac
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+My Approach:-
+-> First I have taken the user input to accept a number for which we need to find the table (read n :- is the command which is accepting user input)
+-> Next using CASE STATEMENT in bash scrpting I am checking if a given number is valid or not.
+     --> First of all i am checking if the given number contains alphabets or any special sumbols as it would result in a invalid number.
+         For that i am using regular expression(*[^0-9]*) in my case statement which will result in true if the given number contains
+         any alphabets or special symbols and that would prompt the user to enter valid number (NOTE:- Output screenshot is in README.md file)
+     --> Next I checked if a given number is a number by using regex([0-9]*) in my case statement.Upon satisfying it will print the table for 
+         that particular number (NOTE:- Output screenshot is in README.md file)
+     --> Next I used (*) in my last case statement which means everything else other than alphanumeric ,specialsymbols,numbers.
+         That is if user does not pass any argument it will get handle by this case statement.Upon satisfying, it will prompt the user to input the 
+         number (echo "Error!! Please Provide Input To Get The Table") (NOTE:- Output screenshot is in README.md file)
+         
+ -> In my while loop to generate table,
+     I initialized i to 1, then I applied the condition while [ $i -le 10 ]: which means if i is less than equal to 10
+     do
+     res=`expr $i \* $n` : which will calculate the product of i with the given number where i will vary from 1 to 10 
+     echo "$n * $i = $res": to display in the table format
+     (( ++i)): Incrementing i by 1
+     done
+     
+Team Solution Review for Question 2:
+------------------------------------
+Srinivas Solution:-
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+#!/bin/bash
+
+# If no arguments are passed the raise an error.
+if [ $# -eq 0 ]; then
+  echo "Error, Please enter a argument to generate table"
+  exit 1
+fi
+
+echo "No of number passed as arguments - $#"
+i=1;
+for number in "$@" 
+do
+    echo "Argument - $i: $number";
+    i=$((i + 1));
+done
+echo ""
+i=1;
+j=$#;
+while [ $i -le $j ] 
+do
+	n=$1 # Intiliaing the first argument as n
+	c=1 # Counter Variable
+	echo "Table of $n:"
+	# Using while loop to generate the table
+	while [ $c -le 10 ] # while counter is less than 10
+	do
+	  result=$(( $n * $c )) # Calculating the product
+	  echo "$n x $c = $result" # Printing the product
+	  c=$(( $c + 1 )) # Incrementing the counter
+	done
+    shift 1;
+	i=$((i+1))
+	echo ""
+done
+
+
+exit 0
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+     
+ His Approach:
+ His script is expecting the number passed as an argument while running the script itself.Then he is checking if the argument is passed or not.If not 
+ he is displaying the error message to the user then he is exiting. if the script recieves the number he is generating the table for that particular 
+ number. Also if the user is passing multiple arguments together, he is handling that scenerio and printing tables for all the number passed.
+ 
+ Difference in approach:-
+ 
+ -> His script is expecting the argument passed while running the script itself while my solution is prompting the user to enter a number.
+ -> In my solution I am validating the input passed by the user is number or not(I am handling all scenerios like if the number passed is only alphabet
+    or its alphanumeric or their is any special symbol.If its results in true it prompts the user for invvalid number,otherwise it prints the desired
+    result
+ -> His script is handling the condition when user passes multiple arguments .
+ 
+ 
+ Akshay's Solution:-
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+# Question 2
+# Taking input from the user
+echo "Enter the number: "
+read n
+
+# Checks and prints message "No input entered" if the user provides no input 
+if [[ -z "$n" ]]; then
+   echo "No input entered"
+   exit 1
+fi
+
+# re='^[0-9]+$'
+# if ! [[ $n =~ $re ]] ; then
+#    echo "error: Not a number";
+#    exit 1
+# fi
+
+re='^[0-9]+$'
+if ! [[ $n =~ $re ]] ; then
+	echo "Not a number, invalid input";
+	exit 1
+fi
+
+# initializing i with 1
+i=1
+  
+# Looping i, i should be less than
+# or equal to 10, i.e., -le stands for less than or equal to
+while [ $i -le 10 ]
+do
+	res=`expr $i \* $n`
+
+	# printing on console
+	echo "$n * $i = $res"
+ 
+	# incrementing i by one 
+	# i = `expr $i + 1` 
+	((++i))
+  
+# end of while loop  
+done
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+         
+His Approach:-
+-> His script is prompting the user to enter a number and then he is checking if the number is passed by user or not ,if not, then he is displaying the
+error message ("No input entered") and exiting
+-> then after he is checking if a passed input is number or not by using the regular expression .If number than he is printing the desired result 
+   otherwise displaying for invalid input ("Not a number, invalid input") and then exit.
+   
+Difference in Approach:-
+-> Approach is almost similar to mine but he is using normal if else conditions to check for inputs,
+   while in my case i have used case statements in bash scripting to get the desired result.
+   
+-----------   
+Question 3. 
+-----------
+->Write a Function in bash script to check if the number is prime or not? It should support the following 
+            requirement. 
+            ●The script should accept the input from the User. 
+            
+ My Solution:-
+ ---------------------------------------------------------------------------------------------------------------------------------------------------------
+ #!/bin/bash
+
+#Question 3
+
+#Taking user input
+echo "Enter a number to check for Prime or not"
+read number
+
+#Function to check if a number is prime or not
+check_prime(){
+  count=0
+  num=$1
+  for (( i=2 ; i<=$num/2 ;i++ ));
+  do
+    if [ `expr $num % $i` -eq 0 ]
+    then
+       count=1
+    fi
+  done
+  if [ $count -eq 1 ] || [ $num -eq 1 ];
+  then
+     echo "The given number $num is not a prime number "
+  else
+     echo "The given number $num is a prime number"
+  fi
+}
+
+#Checking through case statement if a number is valid or not.If not valid then display the error message otherwise call the check_prime function to display whether number is prime or not.If there is no input,it will display
+case $number in
+*[^0-9]*)
+     echo "Please Enter a Valid Number!! $number is not a number"
+     ;;
+[0-9]*)
+	echo $(check_prime $number)
+	;;		 
+*)
+	echo "Error!! Please Provide Input" 
+	;;
+esac
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+My Approach:-
+--> First I have prompted the user for input to enter a number.Then I created the function check_prime() which checks if the given number is prime or not.
+    In my check_prime() function 
+      --> I am taking a count variable which will keep a track if a number is divisible by any number other than 1 and itself
+      --> then I am fetching the number that is being passed to the function(by num=$1) : ($1-fetches the first argument passed to the function)
+      --> Then I am running the loop from 2 to num/2 and checking if the given number is divisible in the following range. If the given number is
+          divisible by any of the number in the range[2,num/2] then i am setting count to 1 which indicates number is not a prime number otherwise 
+          if the number is not divisible by any of the number in the range then count remains 0 and the number is prime
+      --> Outside the while loop I am checking if the count is 1 or 0.If 1 that means the given number is prime otherwise not prime.
+      
+--> Now I have validated the input passed by the user is number or not using CASE STATEMENT.     
+     --> First of all i am checking if the given number contains alphabets or any special sumbols as it would result in a invalid number.
+         For that i am using regular expression(*[^0-9]*) in my case statement which will result in true if the given number contains
+         any alphabets or special symbols and that would prompt the user to enter valid number (NOTE:- Output screenshot is in README.md file)
+     --> Next I checked if a given number is a number by using regex([0-9]*) in my case statement.Upon satisfying
+         it will call the check_prime() number to check if the number is prime or not
+     --> Next I used (*) in my last case statement which means everything else other than alphanumeric ,specialsymbols,numbers.
+         That is if user does not pass any argument it will get handle by this case statement.Upon satisfying, it will prompt the user to input the 
+         number (echo "Error!! Please Provide Input") (NOTE:- Output screenshot is in README.md file)
+         
+Team Solution Review for Question 3:
+------------------------------------
+
+Srinivas Solution:-  
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+#!/bin/bash
+
+# Function to check if it is prime or not
+function is_prime() {
+  num=$1 # Intilizing num by the first argument
+  # If num is less than 2 it is not prime
+  if [ $num -lt 2 ]; then
+    echo "$num is not a prime number."
+    return
+  fi
+  # Loop from 2 to num/2 to verify its divisors
+  for (( i=2; i<$((num/2+1)); i++ ))
+  do
+    if [ $(($num%$i)) -eq 0 ]; then # if found it is not prime numer
+      echo "$num is not a prime number."
+      return
+    fi
+  done
+  # else it is prime
+  echo "$num is a prime number."
+}
+# Reading input from user and storing in num
+read -p "Enter a number: " num
+# Passing it to function is_prime
+is_prime $num
+
+exit 0    
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+ His Approach:-
+ --> He first created the function is_prime() to check if the number passed is prime or not
+ --> He is accepting the users input and then passing the number to the is_prime() function
+ --> Inside is_prime() function for the input less than 2 he is displaying not prime directly by using if [ $num -lt 2 ] condition
+     Then after he is looping in the range[2,num/2] and checking if any number is divisible in this range.If so he is displaying not a prime
+     by echoing ("$num is not a prime number.") otherwise prime.
+     
+ Difference in Approach:-
+ --> In my solution I am validating the input if it is number or not by using regular expression in case statement which will handle all the condition
+     like alphabet, alphanumeric,special symbols.If its either of the case then i am prompting the user to enter a valid number.
+ --> Logic is same for the check prime function
+ 
+ Akshay's Solution:-
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+# Question 3
+echo "Enter the number: "
+# User input for number
+read n
+
+# Checks and prints message "No input entered" if the user provides no input 
+if [[ -z "$n" ]]; then
+   echo "No input entered"
+   exit 1
+fi
+
+re='^[0-9]+$'
+if ! [[ $n =~ $re ]] ; then
+	echo "Not a number, invalid input";
+	exit 1
+fi
+
+if [ $n -eq 1 ]; then
+	echo "$n is not prime"
+	exit 0
+fi
+
+# Looping i, from 2 through n/2
+for((i=2; i<=$n/2; i++))
+do
+  ans=$(( n%i ))
+  if [ $ans -eq 0 ]
+  then
+    echo "$n is not a prime number."
+    exit 0
+  fi
+done
+echo "$n is a prime number."
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+His Approach:
+-> His script is accepting the user input and then checking if the number is passed by user or not.If not he is displaying the error message
+  (echo "No input entered") and then after he is checking if the number entered is valid or not.
+-> Then he is checking if the number is 1, if it is 1 then he is displaying the number is not a prime.
+-> Then he is looping from 2 to number/2 and checking if a number is divisible in the range.if divisible then he is displaying number is not prime 
+   else prime
+   
+Difference in approach:-
+-> In my solution I have created the function check_prime() to check for prime while akshay has directly implemented the logic for checking prime
+   without any function
+-> In My solution I am validating the user input using case statement 
+-> Apart from that logic is same as mine
+
+-----------   
+Question 4. 
+-----------
+Question 4. 
+Create a bash script that supports the following requirement.
+     ● Create a folder ‘Assignment’.
+     ● Create a file ‘File1.txt’ inside ‘Assignment’ Folder.
+     ● Copy all the content of Table.sh(2nd script) in ‘File1.txt’ without using ‘cp’ and ‘mv’
+       command.
+     ● Append the text Welcome to Sigmoid’ to the ‘File1.txt’ file.
+     ● List all the directories and files present inside Desktop Folder.
+     
+My Solution:-
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+#!/bin/bash
+
+#Question 4
+
+# Command for creating the Assignment folder
+mkdir Assignment
+
+# Command for creating the file "File1.txt" inside Assignment folder
+touch Assignment/File1.txt
+
+
+#Command for copying the content of table.sh in File1.txt
+cat Table.sh > Assignment/File1.txt
+
+# Commands to append the text("Welcome to Sigmoid") in File1.txt
+str="Welcome to Sigmoid"
+echo $str >> Assignment/File1.txt
+
+# Listing all the directories and files present inside Desktop Folder and appending it to another text file
+# ls -al ../ >> DesktopListDirectories.txt
+ls -al ~/Desktop >> DesktopListDirectories.txt
+
+echo "Created a file DesktopListDirectories.txt containing all the list and directories present inside Desktop folder"
+
+#Command to open the above created text file containing list of all files and directories present inside Desktop folder
+open DesktopListDirectories.txt
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+My Approach:-
+
+-------------------------------------------------------------------------------------------------------------------------
+| mkdir Assignment                               : Command for creating the Assignment folder                           |
+-------------------------------------------------------------------------------------------------------------------------
+| touch Assignment/File1.txt                     : Command for creating the file "File1.txt" inside Assignment folder.  |
+-------------------------------------------------------------------------------------------------------------------------
+| cat Table.sh > Assignment/File1.txt.           : Command for copying the content of table.sh in File1.txt             |
+-------------------------------------------------------------------------------------------------------------------------
+| str="Welcome to Sigmoid"                                                                                              |
+| echo $str >> Assignment/File1.txt              : Commands to append the text("Welcome to Sigmoid") in File1.txt       |
+-------------------------------------------------------------------------------------------------------------------------
+| ls -al ~/Desktop >> DesktopListDirectories.txt : Listing all the directories and files present inside Desktop Folder  |
+|                                                 and appending it to another text file                                 |
+------------------------------------------------------------------------------------------------------------------------
+| echo "Created a file DesktopListDirectories.txt containing all the list and directories present inside Desktop folder"|
+| open DesktopListDirectories.txt                                                                                       |
+------------------------------------------------------------------------------------------------------------------------
+
+Team Solution Review for Question 4:
+------------------------------------
+
+Srinivas Solution:-  
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+#!/bin/bash
+# Creating folder using mkdir
+mkdir ~/Desktop/Assignment
+echo "Created Assignment Folder"
+# Creating file using touch
+touch ~/Desktop/Assignment/File1.txt
+echo "Created File1.txt in Assignment Folder"
+# Copying data in q2 to file1 using cat
+cat ~/Desktop/projects/commandLine_assignment/Table.sh  >> ~/Desktop/Assignment/File1.txt
+echo "Data in Table.sh copied to File1.txt using cat command"
+# Appending given text to file1
+echo "Welcome to Sigmoid" >> ~/Desktop/Assignment/File1.txt
+
+echo "Folders in the Desktop"
+# Printing files and folders in Desktop
+ls -la ~/Desktop/
+
+exit 0
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+His Approach:-
+-------------------------------------------------------------------------------------------------------------------------
+| mkdir ~/Desktop/Assignment                     : Command for creating the Assignment folder                           |
+-------------------------------------------------------------------------------------------------------------------------
+| touch ~/Desktop/Assignment/File1.txt           : Command for creating the file "File1.txt" inside Assignment folder.  |
+-------------------------------------------------------------------------------------------------------------------------
+| cat ~/Desktop/projects/commandLine_assignment/Table.sh  >> ~/Desktop/Assignment/File1.txt                             |
+|                                                 : Command for copying the content of table.sh in File1.txt            |
+-------------------------------------------------------------------------------------------------------------------------
+| echo "Welcome to Sigmoid" >> ~/Desktop/Assignment/File1.txt                                                           |     
+|                                                 : Commands to append the text("Welcome to Sigmoid") in File1.txt      |
+-------------------------------------------------------------------------------------------------------------------------
+| ls -la ~/Desktop/                              : Printing files and folders in Desktop                                |
+------------------------------------------------------------------------------------------------------------------------
+
+Difference in approach:-
+-> Approach is same as mine but the only diiference is that he has specified the absolute path in every command while in 
+   my case i have used relative path in every command
+-> One more differnce is that In last command in which we are displaying all the files and folders of desktop I am appending
+   that to a new file and opening that file.
+   
+Akshay's Solution:-
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+# Question 4
+# making an empty directory, Assignment, in Home directory
+mkdir ~/Documents/Assignment
+# making a file, File1.txt, in Assignment directory
+touch ~/Documents/Assignment/File1.txt
+# moving the contents of the source file Table.sh, to the destination file File1.txt 
+cat Table.sh >> ~/Documents/Assignment/File1.txt
+# Appending the text "Welcome to Sigmoid" in File1.txt
+echo "Welcome to Sigmoid" >> ~/Documents/Assignment/File1.txt
+# Displaying all the directories and files present in the Desktop folder
+ls -al /Users/akshaypratapsingh/Desktop
+---------------------------------------------------------------------------------------------------------------------------------------------------------   
+
+His Approach:-
+-------------------------------------------------------------------------------------------------------------------------
+| mkdir ~/Documents/Assignment                   : Command for creating the Assignment folder                           |
+-------------------------------------------------------------------------------------------------------------------------
+| touch ~/Documents/Assignment/File1.txt         : Command for creating the file "File1.txt" inside Assignment folder.  |
+-------------------------------------------------------------------------------------------------------------------------
+| cat Table.sh >> ~/Documents/Assignment/File1.txt                                                                      |
+|                                                : Command for copying the content of table.sh in File1.txt             |
+-------------------------------------------------------------------------------------------------------------------------
+| echo "Welcome to Sigmoid" >> ~/Documents/Assignment/File1.txt                                                         |                                    |
+|                                                : Commands to append the text("Welcome to Sigmoid") in File1.txt       |
+-------------------------------------------------------------------------------------------------------------------------
+| ls -al /Users/akshaypratapsingh/Desktop        : Listing all the directories and files present inside Desktop Folder  |
+|                                                 and appending it to another text file                                 |
+------------------------------------------------------------------------------------------------------------------------
+
+Difference in approach:-
+-> Again approach is similar but he has given absolute path for every command and in my case i have used relative path
+-> Again One more differnce is that In last command in which we are displaying all the files and folders of desktop I am appending
+   that to a new file and opening that file.
+   
+-----------   
+Question 5. 
+-----------
+
+-> You have given an array. Using Bash script, print its length, maximum element and minimum element.
+arr=( 2 3 4 1 6 7).
+
+My Solution:-
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+#!/bin/bash
+
+#Question 5
+
+#Taking the user input for size of an array
+echo "Enter the size of array: "
+read size
+
+
+# Taking User Input From shell for an array
+#Assigining an empty array
+arr=()
+for(( i=0; i<size ;i++ ));
+do
+	echo "Enter $(($i+1)) element"
+	read n
+	arr[$i]=$n
+done
+
+echo "Total Number of elements: ${#arr[@]}"
+echo "The array elements are: "
+echo ${arr[@]}
+
+# Function to find maximum and minimum element in a given array
+max_min_ele(){
+	max=${arr[0]}
+	min=${arr[0]}
+
+	for ele in "${arr[@]}";
+	do
+	  if [ $ele -gt $max ]
+	  then
+	    max=$ele
+	  fi
+	  if [ $ele -lt $min ]
+	  then
+		min=$ele
+	  fi
+	done
+	echo "Maximum element in an array: $max"
+	echo "Minimum element in an array: $min"
+}
+
+#Calling the above function max_min_ele
+max_min_ele
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+My Approach:-
+-> Here I have taken the user input for an array.
+    --> First I have prompt user to input the size of the array
+    --> Then accordingly i am prompting user to input array elements as per the size given by user
+-> Then for displaying the total number of elements i.e., length of the array i have used ${#arr[@]} command(echo "Total Number of elements: ${#arr[@]}")
+-> Then I have created the function max_min_ele which is responsible to find maximum and minimum element in a given array
+   Inside the function
+      --> First i have assigned the first element of the array to max and min variable
+      --> Then i am traversing the array and for each element I am checking if the current element is greater than max, if its greater than max
+          then assigning the max with that particular element and same for minimum if the current element is less than minimum,then assigning the min 
+          with that particular element
+      --> After Traversing the whole array I am getting the desired result which i am displaying with the help of
+          (	echo "Maximum element in an array: $max"
+	          echo "Minimum element in an array: $min" )
+ 
+ Team Solution Review for Question 5:
+ ------------------------------------
+ 
+ Sriniva's solution
+ ---------------------------------------------------------------------------------------------------------------------------------------------------------
+ #!/bin/bash
+# Declaring the array
+arr=( 2 3 4 1 6 7)
+echo "Length of the array - "
+echo ${#arr[@]}   # Length of the array
+# Method - 1
+# Using sort function to find the max and min element.
+echo "Max and Min of the array using sort function"
+IFS=$'\n'
+echo "Maximum in the array - "
+echo "${arr[*]}" | sort -nr | head -n1 #Sorting in reverse and fetch the first element
+echo "Minimum in the array - "
+echo "${arr[*]}" | sort -n | head -n1 # Sorting and fetch the first element
+
+# Method - 2
+# Using for loop to find the max and min element.
+echo "Max and Min of the array using for loop"
+max=${arr[0]} #Assuming first element as max
+# Travesing every element in the loop if any element is more than the assumed one change max to it or else continue traversing.
+for n in "${arr[@]}" ; do
+    if [ $n -ge $max ]; then 
+		max=$n
+	fi
+done
+echo "Maximum in the array - $max"
+min=${arr[0]} #Assuming first element as min
+# Travesing every element in the loop if any element is less than the assumed one change min to it or else continue traversing.
+for n in "${arr[@]}" ; do
+    if [ $n -le $min ]; then 
+    	min=$n
+	fi
+done
+echo "Minimum in the array - $min"
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+His Approach:-
+-> He tried to solve it in Two different approaches: first through direct commands and another using loops
+   First Method:
+   IFS=$'\n'	                            : Internal field separator
+   echo "${arr[*]}" | sort -nr | head -n1	: Sorting in reverse and fetch the first element
+   echo "${arr[*]}" | sort -n | head -n1	: Sorting and fetch the first element
+   ->For finding max he is sorting the array in reverse order i.e.,descending order and fetching the first data using head command
+   ->For finding minimum he is sorting the array in ascending order and fetching the first data again using head command
+   Second Method:
+   Same as mine using loop
+   
+Difference in approach:-
+-> In my solution I have taken the user input for the array elements while he is taking array directly 
+-> I have created the seperate function max_min_ele for finding the min and max element of an array while he has implemented directly without any function
+-> Approach is somewhat similar to mine except that first method in which he is directly using commands piping with other commands and getting the 
+   desired result
+   
+ Akshay's Solution:-
+--------------------------------------------------------------------------------------------------------------------------------------------------------- 
+ # Question 5
+echo "Enter an array: "
+# User input for the array
+read -a arr
+
+# Initialize max variable with arr[0]
+max=${arr[0]}
+# Initialize min variable with arr[0]
+min=${arr[0]}
+
+# Loop through all elements in the array
+for i in "${arr[@]}"
+do
+    # Update max if applicable
+    if [[ "$i" -gt "$max" ]]; then
+        max="$i"
+    fi
+
+    # Update min if applicable
+    if [[ "$i" -lt "$min" ]]; then
+        min="$i"
+    fi
+done
+
+# Output results:
+echo "Length of the array is: ${#arr[@]}"
+echo "Maximum element is: $max"
+echo "Minimum element is: $min"
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+His Approach:-
+-> His script accepts the user input and then he is setting the first element of the array to both max and min variable
+-> Then he is traversing the array elements and checking if the current element is greater than max than he is assigning that current element to max 
+   and he is performing same for minimum element,if current element is less than min then he is assigning that element to min
+-> Than at last he is displaying the length of the array using ${#arr[@]} and then max and min calculated above
+
+Difference In Approach:-
+-> Approach is same as mine but I implemented the logic by creating the funtion called max_min_ele which he has done directly.
+   
+   
+            
